@@ -1,0 +1,45 @@
+name: OctoBot-Demo-Cron
+on:
+  push:
+    branches:
+      - '*'
+  schedule:
+    - cron: '0 5 * * *' # every day at 5am
+
+jobs:
+  demo-redeploy:
+    name: OctoBot Demo redeploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: okteto/login@master
+        with:
+          token: ${{ secrets.OKTETO_TOKEN }}
+
+      - name: "Destroy old demo stack"
+        uses: okteto/destroy-stack@master
+        with:
+          namespace: "octobot-drakkarsoftware"
+          name: "demo"
+
+      - name: "Deploy new demo stack"
+        uses: okteto/deploy-stack@master
+        with:
+          namespace: octobot-drakkarsoftware
+          build: "false"
+          name: "demo"
+
+  notify:
+    name: Notify
+    runs-on: ubuntu-latest
+    needs:
+      - demo-redeploy
+    if: ${{ failure() }}
+
+    steps:
+      - name: Notify discord
+        uses: sarisia/actions-status-discord@v1
+        with:
+          status: Failure
+          webhook: ${{ secrets.DISCORD_GITHUB_WEBHOOK }}
