@@ -20,26 +20,12 @@ jobs:
       - name: "Destroy old demo stack"
         uses: okteto/destroy-stack@master
         with:
-          namespace: "octobot-drakkarsoftware"
+          namespace: octobot-jlopezbarb
           name: "demo"
 
       - name: "Deploy new demo stack"
         uses: okteto/deploy-stack@master
         with:
-          namespace: octobot-drakkarsoftware
+          namespace: octobot-jlopezbarb
           build: "false"
           name: "demo"
-
-  notify:
-    name: Notify
-    runs-on: ubuntu-latest
-    needs:
-      - demo-redeploy
-    if: ${{ failure() }}
-
-    steps:
-      - name: Notify discord
-        uses: sarisia/actions-status-discord@v1
-        with:
-          status: Failure
-          webhook: ${{ secrets.DISCORD_GITHUB_WEBHOOK }}
