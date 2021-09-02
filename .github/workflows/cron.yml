@@ -3,9 +3,7 @@ on:
   push:
     branches:
       - '*'
-  schedule:
-    - cron: '0 5 * * *' # every day at 5am
-
+      
 jobs:
   demo-redeploy:
     name: OctoBot Demo redeploy
