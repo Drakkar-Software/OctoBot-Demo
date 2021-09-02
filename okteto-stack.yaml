@@ -1,5 +1,5 @@
 services:
-  demo-1:
+  demo-11:
     public: true
     image: drakkarsoftware/octobot:stable
     replicas: 1
