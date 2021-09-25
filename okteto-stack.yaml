@@ -3,6 +3,8 @@ services:
     public: true
     image: drakkarsoftware/octobot:stable
     replicas: 1
+    environment:
+      - IS_DEMO=True
     ports:
       - 5001
     resources:
@@ -15,6 +17,8 @@ services:
   demo-2:
     public: true
     image: drakkarsoftware/octobot:stable
+    environment:
+      - IS_DEMO=True
     replicas: 1
     ports:
       - 5001
